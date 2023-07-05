@@ -1,4 +1,4 @@
-import { Layout } from "./layout";
+import { Layout } from "../function/layout";
 import { html } from "hono/html";
 
 export function userIndex(c: any) {
@@ -12,7 +12,7 @@ const Index = (props: any) => {
   return (
     <Layout {...props}>
       <h1 class="pb-2 border-bottom">{props.title}</h1>
-      <table id="table" data-toggle="table" data-url="users.json">
+      <table id="table" data-toggle="table" data-url="admin/users.json" data-search="true">
         <thead>
           <tr>
             <th data-field="userPrincipalName" data-sortable="true">
@@ -37,7 +37,7 @@ const Index = (props: any) => {
       {html`
         <script>
           function link(value, row) {
-            return \`<a href="/\${row.userPrincipalName}">編輯</a>\`;
+            return \`<a href="/admin/\${row.userPrincipalName}">編輯</a>\`;
           }
           function twid(value, row) {
             if (value == "set") {

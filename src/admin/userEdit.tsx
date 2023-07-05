@@ -1,9 +1,9 @@
-import { Layout } from "./layout";
-import { getAccessToken } from "./aad";
+import { Layout } from "../function/layout";
+import { getAadAccessToken } from "../function/functions";
 import { html } from "hono/html";
 
 export async function userEdit(c: any) {
-  const access_token = await getAccessToken(c);
+  const access_token = await getAadAccessToken(c);
   const mail = c.req.param("mail");
   const url = `https://graph.microsoft.com/v1.0/users/${mail}?$select=id,displayName,userPrincipalName&$expand=extensions`;
   const options = {

@@ -1,4 +1,4 @@
-import { getAccessToken, createExtension } from "./aad";
+import { getAadAccessToken, createExtension } from "../function/functions";
 import { sha3_512 } from "js-sha3";
 
 export async function userUpdate(c: any) {
@@ -14,7 +14,7 @@ export async function userUpdate(c: any) {
     pwd_expiry: null,
   };
 
-  const access_token = await getAccessToken(c);
+  const access_token = await getAadAccessToken(c);
   const mail = c.req.param("mail");
   const url = `https://graph.microsoft.com/v1.0/users/${mail}/extensions/twfido`;
   const options = {

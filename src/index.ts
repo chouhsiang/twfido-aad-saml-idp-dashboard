@@ -1,8 +1,10 @@
 import { Hono } from "hono";
-import { userIndex } from "./function/userIndex";
-import { userList } from "./function/userList";
-import { userEdit } from "./function/userEdit";
-import { userUpdate } from "./function/userUpdate";
+import { userId } from "./profile/userId";
+import { userIdUpdate } from "./profile/userIdUpdate";
+import { userIndex } from "./admin/userIndex";
+import { userList } from "./admin/userList";
+import { userEdit } from "./admin/userEdit";
+import { userUpdate } from "./admin/userUpdate";
 
 type Bindings = {
   AAD_TENANT_ID: string;
@@ -12,9 +14,11 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-app.get("/", (c) => userIndex(c));
-app.get("/users.json", async (c) => await userList(c));
-app.get("/:mail", async(c)=> await userEdit(c));
-app.post("/:mail", async(c)=> await userUpdate(c));
+app.get("/", (c) => userId(c));
+app.post("/", (c) => userIdUpdate(c));
+app.get("/admin", (c) => userIndex(c));
+app.get("/admin/users.json", async (c) => await userList(c));
+app.get("/admin/:mail", async(c)=> await userEdit(c));
+app.post("/admin/:mail", async(c)=> await userUpdate(c));
 
 export default app;

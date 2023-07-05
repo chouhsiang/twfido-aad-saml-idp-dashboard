@@ -1,4 +1,4 @@
-export async function getAccessToken(c: any): Promise<string | null> {
+export async function getAadAccessToken(c: any): Promise<string | null> {
   const url = `https://login.microsoftonline.com/${c.env.AAD_TENANT_ID}/oauth2/v2.0/token`;
   const params = new URLSearchParams();
   params.append("client_id", c.env.AAD_CLEINT_ID);
@@ -36,4 +36,16 @@ export async function createExtension(mail: string, access_token: string | null)
     })
   };
   await fetch(url, options);
+}
+
+
+export async function getCfAccessUser(cookie: string): Promise<any> {
+  const url = `https://modatw.cloudflareaccess.com/cdn-cgi/access/get-identity`;
+  const options = {
+    headers: {
+      Cookie: cookie
+    }
+  };
+  const f = await fetch(url, options);
+  return await f.json();
 }

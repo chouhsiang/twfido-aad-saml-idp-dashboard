@@ -1,7 +1,7 @@
-import { getAccessToken } from "./aad";
+import { getAadAccessToken } from "../function/functions";
 
 export async function userList(c: any) {
-  const access_token = await getAccessToken(c);
+  const access_token = await getAadAccessToken(c);
   if (access_token == null) {
     return c.json({ msg: "Failed to get Azure AD access token" });
   }
@@ -23,23 +23,17 @@ export async function userList(c: any) {
 
     j = j.map((i: any) => {
       const obj = i;
-      if (i.extensions) {
-        const find = i.extensions.filter((k: any) => k.id == "twfido");
-        if (find.length > 0) {
-          obj.twid = find[0].twid ? "set" : "unset";
-          obj.pwd = find[0].pwd ? "set" : "unset";
-          obj.pwd_expiry = find[0].pwd_expiry.replace("T", " ");
-        } else {
-          obj.twid = "unset";
-          obj.pwd = "unset";
-          obj.pwd_expiry = "";
+      obj.twid = "unset";
+      obj.pwd = "unset";
+      obj.pwd_expiry = "";
+      try {
+        const find = i.extensions.find((k: any) => k.id == "twfido");
+        if (find) {
+          obj.twid = find.twid ? "set" : "unset";
+          obj.pwd = find.pwd ? "set" : "unset";
+          obj.pwd_expiry = find.pwd_expiry.replace("T", " ");
         }
-      } else {
-        obj.twid = "unset";
-        obj.pwd = "unset";
-        obj.pwd_expiry = "";
-      }
-
+      } catch (e) {}
       return obj;
     });
 
